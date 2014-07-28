@@ -1,0 +1,178 @@
+//
+//  BIDFirstLevelTableViewController.m
+//  Nav
+//
+//  Created by Dexter Launchlabs on 7/28/14.
+//  Copyright (c) 2014 Dexter Launchlabs. All rights reserved.
+//
+
+#import "BIDFirstLevelTableViewController.h"
+#import "BIDSecondLevelViewController.h"
+#import "BIDDisclosureButtonController.h"
+#import "BIDRowControlsController.h"
+#import "BIDMoveMeController.h"
+#import "BIDDeleteMeController.h"
+#import "BIDPresidentsViewController.h"
+
+@interface BIDFirstLevelTableViewController ()
+
+@end
+
+@implementation BIDFirstLevelTableViewController
+@synthesize controllers;
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"First Level";
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    //Disclosure Button
+    BIDDisclosureButtonController *disclosureButtonController =
+    [[BIDDisclosureButtonController alloc] initWithStyle:UITableViewStylePlain];
+    disclosureButtonController.title = @"Disclosure Buttons"; disclosureButtonController.rowImage = [UIImage
+                                                                                                     imageNamed:@"disclosureButtonControllerIcon.png"]; [array addObject:disclosureButtonController];
+    
+    BIDCheckListController *checkListController = [[BIDCheckListController alloc]
+                                                   initWithStyle:UITableViewStylePlain]; checkListController.title = @"Check One"; checkListController.rowImage = [UIImage imageNamed:
+                                                                                                                                                                   @"checkmarkControllerIcon.png"]; [array addObject:checkListController];
+    
+    
+    //Table Row Controls
+    // Table Row Controls
+    BIDRowControlsController *rowControlsController =
+    [[BIDRowControlsController alloc]
+     initWithStyle:UITableViewStylePlain]; rowControlsController.title = @"Row Controls"; rowControlsController.rowImage = [UIImage imageNamed:
+                                                                                                                            @"rowControlsIcon.png"];
+    [array addObject:rowControlsController];
+    BIDMoveMeController *moveMeController = [[BIDMoveMeController alloc]
+                                             initWithStyle:UITableViewStylePlain];
+    moveMeController.title = @"Move Me";
+    moveMeController.rowImage = [UIImage imageNamed:@"moveMeIcon.png"]; [array addObject:moveMeController];
+    // Delete Me
+    BIDDeleteMeController *deleteMeController = [[BIDDeleteMeController alloc]
+                                                 initWithStyle:UITableViewStylePlain];
+    deleteMeController.title = @"Delete Me";
+    deleteMeController.rowImage = [UIImage imageNamed:@"deleteMeIcon.png"]; [array addObject:deleteMeController];
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // BIDPresident View/Edit
+    BIDPresidentsViewController *presidentsViewController =
+    [[BIDPresidentsViewController alloc]
+     initWithStyle:UITableViewStylePlain]; presidentsViewController.title = @"Detail Edit"; presidentsViewController.rowImage = [UIImage imageNamed:@"detailEditIcon.png"];
+    [array addObject:presidentsViewController];
+     self.controllers = array;
+}
+- (void)viewDidUnload { [super viewDidUnload]; self.controllers = nil;
+}
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Table view data source
+
+
+#pragma mark -
+#pragma mark Table Data Source Methods
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+     return [self.controllers count];
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *FirstLevelCell = @"FirstLevelCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:
+                             FirstLevelCell];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault reuseIdentifier: FirstLevelCell];
+    }
+    // Configure the cell
+    NSUInteger row = [indexPath row]; BIDSecondLevelViewController *controller =
+    [controllers objectAtIndex:row];
+    cell.textLabel.text = controller.title;
+    cell.imageView.image = controller.rowImage;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator; return cell;
+}
+#pragma mark -
+#pragma mark Table View Delegate Methods
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath { NSUInteger row = [indexPath row];
+    BIDSecondLevelViewController *nextController = [self.controllers
+                                                    objectAtIndex:row]; [self.navigationController pushViewController:nextController animated:YES];
+}
+/*
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    
+    // Configure the cell...
+    
+    return cell;
+}
+*/
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end
